@@ -54,8 +54,56 @@ export function extractJson(text: string): unknown {
     const start = t.indexOf("{");
     const end = t.lastIndexOf("}");
     if (start === -1 || end <= start) throw new Error("no JSON object found in output");
-    return JSON.parse(t.slice(start, end + 1));
+    const sliced = t.slice(start, end + 1);
+    try {
+      return JSON.parse(sliced);
+    } catch {
+      // Last resort: models emitting long markdown bodies (esp. QA-A corrected
+      // drafts) occasionally leave raw newlines/tabs inside string values,
+      // which is invalid JSON. Escape control characters that appear INSIDE
+      // strings (quote-state aware) and retry once.
+      return JSON.parse(escapeControlCharsInStrings(sliced));
+    }
   }
+}
+
+/**
+ * Walk the text tracking JSON string state (respecting backslash escapes) and
+ * escape raw control characters (newline, carriage return, tab) that appear
+ * inside string literals. Control characters between tokens (pretty-printing
+ * whitespace) are left untouched.
+ */
+function escapeControlCharsInStrings(s: string): string {
+  let out = "";
+  let inString = false;
+  let escaped = false;
+  for (let i = 0; i < s.length; i++) {
+    const ch = s[i];
+    if (escaped) {
+      out += ch;
+      escaped = false;
+      continue;
+    }
+    if (ch === "\\") {
+      out += ch;
+      escaped = true;
+      continue;
+    }
+    if (ch === '"') {
+      inString = !inString;
+      out += ch;
+      continue;
+    }
+    if (inString) {
+      if (ch === "\n") out += "\\n";
+      else if (ch === "\r") out += "\\r";
+      else if (ch === "\t") out += "\\t";
+      else out += ch;
+    } else {
+      out += ch;
+    }
+  }
+  return out;
 }
 
 /**
