@@ -24,5 +24,8 @@ npm-debug.log*
 # local logs
 *.log
 
+# scratch / CLI output
+.tmp/
+
 .vercel
 .env*
