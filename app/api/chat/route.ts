@@ -63,7 +63,11 @@ export async function POST(req: Request): Promise<Response> {
 
       writer.write({ type: "data-thread", data: { id: resolvedThreadId } });
       writer.write({ type: "data-sources", data: run.sources });
-      writer.merge(run.stream.toUIMessageStream());
+      // sendStart: false — the data parts above already opened the assistant
+      // message on the client; a second `start` chunk from the merged stream
+      // would begin a SECOND assistant message carrying the same data parts,
+      // rendering the sources row twice.
+      writer.merge(run.stream.toUIMessageStream({ sendStart: false }));
     },
     onError(error) {
       console.error("[/api/chat] stream error:", error);
