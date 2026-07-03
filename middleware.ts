@@ -33,13 +33,11 @@ export const config = {
   /**
    * Run on everything EXCEPT:
    * - /gate            (the password page and its server action POST)
-   * - /api/mock-chat   (Phase-1 dev fixture — deleted in Phase 2; remove this
-   *                     exclusion when the route goes away)
    * - /_next/*         (framework internals: static chunks, image optimizer)
    * - /favicon.ico
    * - any path containing a dot (static assets served from /public)
    */
   matcher: [
-    "/((?!gate$|gate/|api/mock-chat|_next/|favicon.ico|.*\\..*).*)",
+    "/((?!gate$|gate/|_next/|favicon.ico|.*\\..*).*)",
   ],
 };

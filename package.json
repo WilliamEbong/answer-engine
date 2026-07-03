@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "migrate": "tsx --env-file=.env scripts/migrate.ts",
+    "smoke": "tsx --env-file=.env scripts/smoke.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.92",

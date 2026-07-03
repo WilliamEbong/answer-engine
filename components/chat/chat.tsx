@@ -43,6 +43,13 @@ export function Chat({
   // Current thread id; updated from the data-thread part on first exchange.
   const threadIdRef = useRef<string | undefined>(threadId);
 
+  // Stable chat-store key. NEVER pass `id: undefined` to useChat: the hook
+  // treats a present-but-undefined id as "different from the generated one"
+  // and recreates an empty Chat instance on every render, losing all state
+  // (the exact bug this fixes). The client key is independent of the
+  // server-generated thread id, which travels via threadIdRef/data-thread.
+  const [chatId] = useState(() => threadId ?? crypto.randomUUID());
+
   // Transport is created once; prepareSendMessagesRequest reads the ref so
   // follow-up requests carry the thread id assigned mid-stream.
   const [transport] = useState(
@@ -73,7 +80,7 @@ export function Chat({
 
   const { messages, sendMessage, status, error, regenerate } =
     useChat<AnswerUIMessage>({
-      id: threadId,
+      id: chatId,
       transport,
       messages: initialMessages ?? undefined,
       onData: (part) => {
