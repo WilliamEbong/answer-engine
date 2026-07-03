@@ -45,9 +45,30 @@ function buildRegistry(): Registry {
   return createProviderRegistry(providers);
 }
 
+/**
+ * Explainer model tiers (EXPLAINER-BUILD.md §2/§8). Every tier falls back to
+ * LLM_MODEL, so unset tier envs reproduce v1 behavior exactly.
+ */
+export type ModelTier = "small" | "mid" | "strong";
+
+/** Resolve a tier to its configured model id (falls back to LLM_MODEL). */
+export function getModelId(tier?: ModelTier): string {
+  const env = getEnv();
+  switch (tier) {
+    case "small":
+      return env.LLM_MODEL_SMALL ?? env.LLM_MODEL;
+    case "mid":
+      return env.LLM_MODEL_MID ?? env.LLM_MODEL;
+    case "strong":
+      return env.LLM_MODEL_STRONG ?? env.LLM_MODEL;
+    default:
+      return env.LLM_MODEL;
+  }
+}
+
 /** Resolve the configured chat model lazily from env (cached after first call). */
-export function getModel(): LanguageModel {
+export function getModel(tier?: ModelTier): LanguageModel {
   if (!registry) registry = buildRegistry();
   const env = getEnv();
-  return registry.languageModel(`${env.LLM_PROVIDER}:${env.LLM_MODEL}`);
+  return registry.languageModel(`${env.LLM_PROVIDER}:${getModelId(tier)}`);
 }

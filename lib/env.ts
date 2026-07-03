@@ -23,15 +23,38 @@ const envSchema = z
       .url()
       .optional()
       .or(z.literal("").transform(() => undefined)),
+    // Explainer model tiers (EXPLAINER-BUILD.md §8). Unset ⇒ LLM_MODEL everywhere.
+    LLM_MODEL_SMALL: z
+      .string()
+      .min(1)
+      .optional()
+      .or(z.literal("").transform(() => undefined)),
+    LLM_MODEL_MID: z
+      .string()
+      .min(1)
+      .optional()
+      .or(z.literal("").transform(() => undefined)),
+    LLM_MODEL_STRONG: z
+      .string()
+      .min(1)
+      .optional()
+      .or(z.literal("").transform(() => undefined)),
     TAVILY_API_KEY: z.string().min(1, "TAVILY_API_KEY is required"),
-    SUPABASE_URL: z.url({ error: "SUPABASE_URL must be a URL" }),
+    // Optional: v1 runtime (lib/db/*) needs these; the explainer module uses
+    // pg over DATABASE_URL and runs without them.
+    SUPABASE_URL: z
+      .url({ error: "SUPABASE_URL must be a URL" })
+      .optional()
+      .or(z.literal("").transform(() => undefined)),
     SUPABASE_SERVICE_ROLE_KEY: z
       .string()
-      .min(1, "SUPABASE_SERVICE_ROLE_KEY is required")
+      .min(1)
       .refine(
         (k) => !k.startsWith("sb_publishable_"),
         "SUPABASE_SERVICE_ROLE_KEY is a publishable key — paste the service-role secret (sb_secret_...) from Supabase Dashboard → Project Settings → API keys",
-      ),
+      )
+      .optional()
+      .or(z.literal("").transform(() => undefined)),
     DATABASE_URL: z
       .string()
       .startsWith("postgres", "DATABASE_URL must be a postgres:// connection string (Supabase session pooler)"),
