@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "migrate": "tsx --env-file=.env scripts/migrate.ts",
-    "smoke": "tsx --env-file=.env scripts/smoke.ts"
+    "smoke": "tsx --env-file=.env scripts/smoke.ts",
+    "explain": "tsx --env-file=.env scripts/explain.ts",
+    "explainer:gates": "tsx --env-file=.env scripts/explainer-gates.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.92",

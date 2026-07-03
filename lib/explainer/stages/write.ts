@@ -34,6 +34,9 @@ THE NO-OUTSIDE-FACTS RULE IS INVIOLABLE:
 - Do not add interpretive or statistical inferences the briefing does not itself make: do not compare confidence intervals, compute new numbers, remark on statistical significance, or say what a result "suggests" beyond the briefing's own wording.
 - Do not characterize or elaborate on study arms, populations, methods, or context beyond how the briefing describes them. Even innocuous-sounding glosses ("the usual approach", "widely used", "well-established") are new factual claims and are forbidden.
 - Do not strengthen the briefing's claims: no upgrading correlations to causes, no generalizing beyond the studied population, no implying the finding is settled when the briefing hedges.
+- NEVER explain WHY a result occurred unless the briefing itself gives that explanation. No mechanism speculation of any kind — sentences built on "because", "likely", "probably", "presumably", "which means", or "suggesting that" are forbidden unless the briefing makes the same connection in its own words.
+- No superlatives or comparatives the briefing does not itself make ("largest", "most", "best", "hardest", "first") and no re-characterizations of subgroups, measures, or arms beyond the briefing's own wording.
+- When naming measures, arms, subgroups, timepoints, or outcomes, reuse the briefing's own wording as closely as the audience allows. Plain-language glosses are welcome where the audience profile calls for them, but a gloss must be meaning-neutral — it restates what the briefing's term says, never what you infer the term implies.
 - Analogies and framing may vary by audience and are welcome where the audience profile calls for them, but an analogy must be signposted by phrasing ("think of it like...") and must not smuggle in new factual claims about the real world.
 - If the briefing does not support something you want to say, leave it out. When in doubt, leave it out.
 

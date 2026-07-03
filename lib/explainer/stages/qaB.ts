@@ -34,9 +34,10 @@ CLAIM EXTRACTION — be EXHAUSTIVE:
 - Cap the list at the ${MAX_QA_B_CLAIMS} MOST SUBSTANTIVE claims. If you had to leave substantive claims out because of the cap, set "capped": true; otherwise set it false.
 
 PER-CLAIM VERDICT — judged against the briefing ONLY:
-- "supported": the briefing states this, with matching strength and exact figures. "evidence" must quote or precisely cite the part of the briefing that supports it.
+- "supported": the briefing states this, with matching strength and exact figures. "evidence" must quote or precisely cite the part of the briefing that supports it. A faithful paraphrase or plain-language gloss that preserves the claim's meaning, strength, scope, and figures is SUPPORTED — explainers exist to restate the briefing for their audience, and restating is not a violation.
 - "unsupported": the claim (or its specificity) does not appear in the briefing. "evidence" must explain what is missing from the briefing.
-- "distorted": the underlying fact IS in the briefing, but the draft's framing misleads — rounded or altered figures, correlation presented as causation, hedged findings presented as settled, a subgroup result generalized, a limitation softened, or hype the briefing does not license. "evidence" must quote the briefing and explain the mismatch. DISTORTED COUNTS AS FAILURE — a technically-true-but-misleading claim is a rejection, not a pass.
+- "distorted": the underlying fact IS in the briefing, but the draft's framing would leave the reader believing something the briefing does not support — rounded or altered figures, correlation presented as causation, hedged findings presented as settled, a subgroup result generalized, a limitation softened, or hype the briefing does not license. "evidence" must quote the briefing and explain the mismatch. DISTORTED COUNTS AS FAILURE — a technically-true-but-misleading claim is a rejection, not a pass.
+- Calibration: the test for "distorted" is MISLEADING, not merely reworded. Ask: would a reader of this claim come away believing anything materially different from a reader of the briefing? If the meaning, strength, scope, and figures survive intact, the claim is "supported" even when the wording differs.
 
 OUTPUT RULES:
 - Respond with a single JSON object only — no prose before or after, no markdown code fences.`;

@@ -20,12 +20,17 @@ export default function AppLayout({
         >
           Answer Engine
         </Link>
-        <Button asChild variant="ghost" size="sm">
-          <Link href="/">
-            <PlusIcon className="size-4" />
-            New thread
-          </Link>
-        </Button>
+        <div className="flex items-center gap-1">
+          <Button asChild variant="ghost" size="sm">
+            <Link href="/explain">Explain</Link>
+          </Button>
+          <Button asChild variant="ghost" size="sm">
+            <Link href="/">
+              <PlusIcon className="size-4" />
+              New thread
+            </Link>
+          </Button>
+        </div>
       </header>
       <main className="flex min-h-0 flex-1 flex-col">{children}</main>
     </div>

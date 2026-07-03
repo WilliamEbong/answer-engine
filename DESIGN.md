@@ -46,6 +46,8 @@ verified in the acceptance checklist).
 | `app/(app)/layout.tsx` | App shell: slim header (brand link, "New thread" button), full-height flex column. |
 | `app/(app)/page.tsx` | Home (server): hero + recent threads via `listThreads()`. |
 | `app/(app)/t/[id]/page.tsx` | Thread view (server): loads the persisted exchange, seeds the chat surface. |
+| `app/(app)/explain/page.tsx` | Explainer home (server): paste-in form + recent jobs list. |
+| `app/(app)/explain/[id]/page.tsx` | Explainer job view (server): seeds the client `JobView` with the persisted row. |
 | `app/gate/page.tsx` + `gate-form.tsx` | Password gate: centered card, password input, inline error. (`actions.ts` is logic — off-limits.) |
 
 ### Chat surface — `components/chat/`
@@ -59,7 +61,18 @@ verified in the acceptance checklist).
 | `thread-list.tsx` | Recent-threads list on home (icon, title, relative time). |
 | `convert.ts`, `relative-time.ts`, `endpoint.ts` | Logic/utils — off-limits. |
 
-### Primitives
+### Explainer surface — `components/explainer/`
+| File | Purpose |
+|---|---|
+| `explain-form.tsx` | Paste-in form: three textareas (primary/supporting/metadata), submit → job view. |
+| `recent-jobs.tsx` | Recent-jobs list (title, status `Badge` chip, relative time); exports the status→Badge-variant map. |
+| `job-view.tsx` | Client job surface: stepper + status chip always; approved → level tabs + QA report; rejections → rejection report; error → retry card. |
+| `job-stepper.tsx` | Five-step wave progress (Briefing → Design → Drafts → QA-A → QA-B): check / spinner / X / muted-dot markers. |
+| `level-tabs.tsx` | Beginner/intermediate/advanced toggle (`ui/tabs`), per level: title, dek, Streamdown body, takeaways + limitations cards. |
+| `qa-report.tsx` | Collapsible QA accordion: per-level pass chip, QA-A change log, claim table with verdict badges. |
+| `rejection-report.tsx` | `rejected_input` "What to add" emphasis list / `rejected_qa` failing-claims table. |
+| `explain-deeper-button.tsx` | Outline button rendered under completed answers in `chat.tsx`; creates a thread-bridged job. |
+| `use-explainer-job.ts` | Logic (advance-polling hook) — off-limits. |
 `components/ui/*` — stock shadcn primitives (button, card, input, skeleton,
 spinner, textarea, tooltip, …). `components/ai-elements/*` — stock AI Elements
 (conversation and message are in use). Both restyle via the tokens; edit their
@@ -74,12 +87,13 @@ Password: `ACCESS_PASSWORD` from `.env`. Look at:
 2. `/` — hero + recent threads.
 3. `/` → ask a question — skeleton source cards → sources row → streaming text with citation chips (throttle network to hold the skeletons).
 4. `/t/[id]` (any recent thread) — restored conversation, sources rows, chips, follow-up input; click a chip to see the source-card ring highlight (`target:ring-2`).
+5. `/explain` — paste-in form + recent jobs; paste `fixtures/explainer/rich-input.md` and submit to watch the stepper, then the level tabs + QA accordion on approval (a full job costs a few cents and ~3 minutes).
 
 ## 3. The restyle contract
 
 A design session **may edit only**:
 - `app/globals.css` (token values, new tokens, keyframes)
-- Component **markup/classNames** in `app/(app)/`, `app/gate/page.tsx` + `gate-form.tsx`, `components/chat/`, `components/ui/`, `components/ai-elements/`
+- Component **markup/classNames** in `app/(app)/`, `app/gate/page.tsx` + `gate-form.tsx`, `components/chat/`, `components/explainer/` (except `use-explainer-job.ts`), `components/ui/`, `components/ai-elements/`
 - Static assets (`public/`, favicon)
 
 It **must not touch**: `lib/` (all of it — `lib/types.ts` contracts especially),

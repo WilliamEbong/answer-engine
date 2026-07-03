@@ -6,6 +6,7 @@ import {
   ConversationScrollButton,
 } from "@/components/ai-elements/conversation";
 import { Message, MessageContent } from "@/components/ai-elements/message";
+import { ExplainDeeperButton } from "@/components/explainer/explain-deeper-button";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { AnswerUIMessage, ChatRequestBody, Source } from "@/lib/types";
@@ -42,6 +43,9 @@ export function Chat({
 }) {
   // Current thread id; updated from the data-thread part on first exchange.
   const threadIdRef = useRef<string | undefined>(threadId);
+  // Render-safe mirror of threadIdRef (refs must not be read during render);
+  // drives the "Explain deeper" action on completed answers.
+  const [currentThreadId, setCurrentThreadId] = useState(threadId);
 
   // Stable chat-store key. NEVER pass `id: undefined` to useChat: the hook
   // treats a present-but-undefined id as "different from the generated one"
@@ -86,6 +90,7 @@ export function Chat({
       onData: (part) => {
         if (part.type === "data-thread") {
           threadIdRef.current = part.data.id;
+          setCurrentThreadId(part.data.id);
           if (window.location.pathname === "/") {
             window.history.replaceState(null, "", `/t/${part.data.id}`);
           }
@@ -148,6 +153,7 @@ export function Chat({
                 message={message}
                 isLast={i === messages.length - 1}
                 status={status}
+                threadId={currentThreadId}
               />
             )
           )}
@@ -177,10 +183,12 @@ function AssistantMessage({
   message,
   isLast,
   status,
+  threadId,
 }: {
   message: AnswerUIMessage;
   isLast: boolean;
   status: ChatStatus;
+  threadId?: string;
 }) {
   const sources = message.parts.find((p) => p.type === "data-sources")?.data as
     | Source[]
@@ -213,6 +221,7 @@ function AssistantMessage({
         ) : live ? (
           <AnswerTextSkeleton />
         ) : null}
+        {!live && text && threadId && <ExplainDeeperButton threadId={threadId} />}
       </MessageContent>
     </Message>
   );
