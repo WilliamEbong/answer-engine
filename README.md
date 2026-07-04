@@ -180,7 +180,15 @@ POST /api/explainer/jobs/[id]/advance   runs exactly ONE wave; client polls to t
 11. **Unattended E2E evidence is HTTP-level** (dev server driven with a signed
    session cookie: job lifecycle, page markup, gate 401s) — the interactive
    browser pass was not possible in the owner's absence.
-12. **QA-B distortion boundary calibrated to "misleading", not "reworded"**:
+12. **Wave routes run at `maxDuration = 300` (Vercel Fluid Compute)**: a QA-A
+   wave returns full corrected drafts and runs 60–150s, over the old 60s Hobby
+   cap — W4 would 504 on the deployed job path. 300s (Fluid Compute default)
+   fixes it; §9.3's per-level split is the fallback if a wave ever exceeds even
+   that. QA-A/writer JSON output is hardened against raw double-quotes (prose
+   uses single/typographic quotes) with a targeted retry hint and an
+   `extractJson` control-char repair, since one unescaped `"` breaks the whole
+   response.
+13. **QA-B distortion boundary calibrated to "misleading", not "reworded"**:
    early gate runs rejected faithful plain-language paraphrases (e.g. "steps
    requiring more physical coordination" for "steps rated as high motor
    complexity") as distorted. The spec defines distorted as correct fact with
