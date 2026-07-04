@@ -10,7 +10,9 @@ import type { SourceMaterial } from "@/lib/explainer/types";
  * Auth is enforced by middleware.ts — no auth code here.
  */
 
-export const maxDuration = 60;
+// Higher budget: the threadId path enriches every thread source (Tavily Extract
+// + fetch fallback) before creating the job. Vercel Fluid Compute allows 300s.
+export const maxDuration = 300;
 
 const bodySchema = z.object({
   jobId: z.string().min(1).optional(),

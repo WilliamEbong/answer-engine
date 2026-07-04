@@ -7,9 +7,14 @@ import { JobNotFoundError, advance } from "@/lib/explainer/orchestrate";
  *
  * A row whose status lands on 'error' is a PERSISTED state (resumable via the
  * next advance), not an HTTP failure — it returns 200 with the row.
+ *
+ * maxDuration 300: a wave fans out N stage calls in parallel and completes with
+ * the slowest — QA-A can return a full corrected draft and run 60–150s. Vercel
+ * Fluid Compute (default) allows up to 300s on Hobby. If a wave still exceeds
+ * the budget, §9.3's per-level split is the pre-authorized fallback.
  */
 
-export const maxDuration = 60;
+export const maxDuration = 300;
 
 export async function POST(
   _req: Request,
