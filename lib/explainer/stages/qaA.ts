@@ -39,7 +39,8 @@ VERDICT RULES:
 - The corrected draft's "audienceKey" must equal the original draft's.
 
 OUTPUT RULES:
-- Respond with a single JSON object only — no prose before or after, no markdown code fences.`;
+- Respond with a single JSON object only — no prose before or after, no markdown code fences.
+- JSON SAFETY: inside string values (especially the corrected draft's "bodyMarkdown"), do NOT use raw double-quote characters — they break the JSON. When you need quotation marks in prose, use single quotes or typographic quotes (' ' " "). Write every line break inside a string as \\n, never a literal newline. This matters most in "correctedDraft", which is long.`;
 
 export const buildQaAPrompt = (
   b: Briefing,

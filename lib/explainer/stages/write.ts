@@ -44,7 +44,8 @@ THE NO-OUTSIDE-FACTS RULE IS INVIOLABLE:
 - If the briefing does not support something you want to say, leave it out. When in doubt, leave it out.
 
 OUTPUT RULES:
-- Respond with a single JSON object only — no prose before or after, no markdown code fences.`;
+- Respond with a single JSON object only — no prose before or after, no markdown code fences.
+- JSON SAFETY: inside string values (especially "bodyMarkdown"), do NOT use raw double-quote characters — they break the JSON. When you need quotation marks in prose, use single quotes or typographic quotes (' ' " "). Write every line break inside a string as \\n, never a literal newline.`;
 
 export const buildWritePrompt = (
   b: Briefing,

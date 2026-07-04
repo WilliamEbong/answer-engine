@@ -156,7 +156,12 @@ export async function callStage<S extends z.ZodType>(
       data = first.data;
     } else {
       retried = true;
-      const retryPrompt = `${opts.prompt}\n\nYour previous output failed validation:\n${first.error}\nOutput ONLY the corrected JSON object. No prose, no code fences.`;
+      // JSON parse failures are almost always unescaped quotes/newlines inside
+      // a long string value — give the model the specific fix, not just the error.
+      const jsonHint = first.error.startsWith("JSON parse failed")
+        ? " The failure is unescaped characters inside a string value: escape every double-quote as \\\" and every line break as \\n, or rewrite prose quotation marks as single/typographic quotes."
+        : "";
+      const retryPrompt = `${opts.prompt}\n\nYour previous output failed validation:\n${first.error}${jsonHint}\nOutput ONLY the corrected JSON object. No prose, no code fences.`;
       const second = validate(await attempt(retryPrompt));
       if (!second.ok) {
         throw new StageError(opts.stage, `output failed validation after retry: ${second.error}`);
